@@ -222,3 +222,130 @@ c2
    2. 열과 행이 1보다 크고 8보다 작으면 `cnt +=1` 을 한다.
 6. 최종 프린트한다.
 
+
+
+# 게임 개발
+
+**내가 작성한 코드**
+
+```python
+n, m = map(int,input().split())
+x, y , start = map(int,input().split())
+location = []
+loc = []
+
+foot = 0
+
+steps = [(-1,0),(0,1),(1,0),(0,-1)]
+
+for i in range(n):
+  a = list(map(int, input().split()))
+  for i in a:
+    loc.append(i)
+  location.append(loc)
+  loc = []
+
+if start == 0:
+  foor = 2
+  dx, dy = x,y
+  dx, dy = steps[0]
+  if location[dx][dy] == 1:
+    location[dx][dy] = location[x][y]
+    start = 3
+>
+4 4
+1 1 0
+1 1 1 1
+1 0 0 1
+1 1 0 1
+1 1 1 1
+```
+
+1. 사용자에게서 행과 열을 받아온다.
+2. 캐릭터의 좌표와 시작방향을 받아온다.
+3. 행을 끊어서 리스트 안에 리스트로 담는다.
+4. 움직인 것을 구하기 위해 foot을 만들었다.
+5. 동서남북을 생각해서 steps을 만들었다.
+6. 그 다음에 행 만큼 루프를 돌려서 좌표를 바다와 육지를 받는다.
+7. 받아온 후에 움직이는 루프를 만들었지만 시간을 초과하였다....
+   1. 우선 동,서,남,북 다 만드려고 했었다.
+   2. 그 다음에 내가 만든 리스트의 인덱스에 해당하는 행에서 열을 빼오는 형식으로 만들었다.
+
+---
+
+**다른 답안**
+
+- 전형적인 시뮬레이션 문제이다.
+- 별도의 알고리즘 보다는 요구하는 내용을 오류없이 성실하게 구현하면 할 수 있다.
+- 별도의 dx, dy좌표를 리스트로 만들어 방향을 정하면 효과적이다.
+- 리스트 컴프리헨션으로 2차원 리스트를 초기화 하였는데 파이썬에서 2차원 리스트를 선언할 때는 컴프리헨션을 사용하는 것이 효과적이다.
+
+```python
+n, m = map(int,input().split())
+
+d = [[0] * m for _ in range(n)]
+
+x, y , start = map(int,input().split())
+d[x][y] = 1
+
+array = []
+for i in range(n):
+  array.append(list(map(int, input().split())))
+
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+def turn_left():
+  global start
+  start -= 1
+  if start == -1:
+    start = 3
+
+cnt = 1
+turn_time = 0
+while True:
+  turn_left()
+  nx = x + dx[start]
+  ny = y + dy[start]
+
+  if d[nx][ny] == 0 and array[nx][ny] == 0:
+    d[nx][ny] = 1
+    x = nx
+    y = ny
+    cnt +=1
+    turn_time = 0
+    continue
+  else:
+    turn_time += 1
+  if turn_time == 4:
+    nx = x - dx[start]
+    ny = y - dy[start]
+    if array[nx][ny] == 0 :
+      x = nx
+      y = ny
+    else:
+      break
+    turn_time = 0
+print(cnt)
+>
+4 4 
+1 1 0
+1 1 1 1
+1 0 0 1
+1 1 0 1
+1 1 1 1
+3
+```
+
+1. 사용자에게서 행과 열을 받아온다. 
+2. 그 다음에 전체 행과 열을 0으로 만들어 버린다.
+3. 좌표와 시작 지점을 받아온다.
+4. 북,동,남,서 방향으로 움직이는 리스트를 만든다.
+5. 왼쪽으로 도니깐 왼쪽으로 도는 함수 하나를 생성한다.
+   1. global을 사용하여 전역변수로 만든다.
+   2. 그러면 다른 곳에서도 `start` 를 쓸 수 있다.
+6. 맨 처음에 왼쪽으로 돈 다음 해당 시작 지점을 더한다.
+7. 만약에 움직였는데 처음가는 곳이면 움직인다. 동시에 움직인 횟수를 추가한다.
+8. 만약에 돌았는데 갔던 곳이나 바다면 다시 돈다.
+9. 4번 다 돌았으면 뒤로 한 칸간다. 여기서 뒤가 바다면 while을 끝낸다.
+10. 최종 횟수를 출력한다.
