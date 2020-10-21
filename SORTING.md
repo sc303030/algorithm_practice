@@ -124,3 +124,61 @@ for student in array:
 5. 순서대로 이름을 출력하면 된다.
 6. 이중 루프 구문이 없고 깔끔하다.
 
+### 두 배열의 원소 교체
+
+**내가 작성한 답안**
+
+```python
+n, k = map(int,input().split())
+a_list = sorted(list(map(int, input().split())))
+b_list = sorted(list(map(int, input().split())),reverse=True)
+
+for i in range(k):
+    a_list[i] , b_list[i] = b_list[i], a_list[i]
+
+result = 0
+for i in a_list:
+    result += i
+    
+print(result)
+>
+5 3
+1 2 5 4 3
+5 5 6 6 5
+26
+```
+
+1. n과 k를 받아온다.
+2. a와 b 리스트를 받아서 바로 정렬한다.
+   1. b는 내림차순으로 정렬한다.
+3. k만큼 루프를 돌려서 인덱스에 해당하는 값을 바꾼다.
+4. 합을 구해서 출력한다.
+
+---
+
+**다른 답안**
+
+```python
+# 다른 답안
+n, k = map(int,input().split())
+a = list(map(int, input().split()))
+b = list(map(int, input().split()))
+
+a.sort()
+b.sort(reverse=True)
+
+for i in range(k):
+    if a[i] < b[i]:
+        a[i], b[i] = b[i], a[i]
+    else:
+        break
+print(sum(a))
+```
+
+1. n과 k를 받아온다.
+2. a와 b리스트를 만든다.
+3. a와 b리스트를 정렬한다.
+   1. b는 내림차순으로 정렬한다.
+
+4. k만큼 돌리는데 a의 값이 b보다 작아야 바꾸고 그렇지 않으면 루프를 탈출한다.
+5. sum으로 합을 구한다.
