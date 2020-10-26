@@ -130,3 +130,83 @@ no yes yes
 2. 소비자가 입력한 부품 번호를 받는다.
 3. 하나씩 루프를 돌려서 가게 부품 번호와 확인한다.
 
+### 떡볶이 떡 만들기
+
+**내가 작성한 답안**
+
+```python
+n,m = map(int,input().split())
+dd_list = list(map(int,input().split()))
+
+dd_list.sort(reverse=True)
+result= []
+a = 1
+while True :
+    for i in dd_list:
+        b = i - dd_list[-a]
+        if b < 0:
+            result.append(0)
+        else:
+            result.append(b)
+    if sum(result) == m:
+        break;
+    a += 1
+    result = []
+print(dd_list[a])
+>
+4 6
+19 15 10 17
+15
+```
+
+1. 떡의 개수와 길이를 받는다.
+2. 떡의 개별 높이를 받아서 내림차순으로 정렬한다.
+
+3. 높은 떡의 길이부터 낮은 떡의 길이를 뺀다.
+   1. 이 길이가 -면 0을 +면 그 값을 result에 담는다.
+   2. 이 값이 m이랑 일치하면 while를 빠져나간다.
+
+4. 떡의 길이 리스트에 a를 넣어서 최댓값을 구한다.
+5. 이건 하나 하나 구하지 않아서 안 될 것 같다.
+
+---
+
+**다른 답안**
+
+```python
+n,m = map(int,input().split())
+array = list(map(int,input().split()))
+
+start = 0
+end = max(array)
+
+result = 0
+while(start <= end):
+    total = 0
+    mid = (start + end) // 2
+    for x in array:
+        if x > mid:
+            total += x - mid
+    if total < m:
+        end = mid - 1
+    else:
+        result = mid
+        start = mid + 1
+print(result)
+>
+4 6
+19 15 10 17
+15
+```
+
+1. 떡의 개수와 길이를 받는다.
+2. 떡의 개별 높이를 받는다.
+3. start와 end를 지정한다.
+   1. end는 개별 떡의 최댓값으로 설정한다.
+4. 시작지점이 끝 지점보다 커질때까지 계속 반복한다.
+   1. 중간지점과 x를 비교해서 x가 크면 떡을 자르고, 이 값을 total에 저장한다.
+   2. 만약에 total이 m보다 작으면 끝점을 감소시킨다.
+   3. 중간점을 계속 옮기면서 남은 떡의 길이를 계산한다.
+   4. 결과가 중간점과 일치하면 result를 담고, start가 end보다 커질 것이다. 그러면 빠져나온다
+5. 최종 결과를 출력한다.
+
