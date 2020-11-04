@@ -92,3 +92,70 @@ else:
    2. 4에 도달하기까지 이렇게 하면 된다.
 4. k다음에 x에 가야하니 `company_root[1][k] + company_root[k][x]` 이렇게 구한다.
 5. 만약에 겹치는게 없었으면 무한대 값을 가지고 있을데니 -1일 출력하고 값이 있으면 해당 값을 출력한다.
+
+---
+
+### 전보
+
+**다른 답안**
+
+```python
+import heapq
+INF = int(1e9)
+
+
+n,m, c = map(int, input().split())
+
+
+meassge_list = [ [] for _ in range(n+1)]
+distance= [INF] * (n+1)
+
+        
+for i in range(m):
+    x,y,z = map(int, input().split())
+    meassge_list[x].append((y,z))
+    
+def dij(c):
+    q = []
+    heapq.heappush(q, (0,c))
+    distance[c] = 0
+    while q:
+        dist, now = heapq.heappop(q)
+        if distance[now] < dist:
+            continue
+        for i in meassge_list[now]:
+            cost = dist + i[1]
+            if cost < distance[i[0]]:
+                distance[i[0]] = cost
+                heapq.heappush(q,(cost,i[0]))
+                
+dij(c)
+
+count = 0
+max_distance = 0
+for d in distance:
+    if d != INF:
+        count +=1
+        max_distance = max(max_distance,d)
+        
+print(count - 1, max_distance)
+>
+3 2 1
+1 2 4
+1 3 2
+2 4
+```
+
+- 다익스트라 알고리즘을 사용해야 한다.
+
+1. 우선 빠른 큐를 지원하는 heapq를 사용한다.
+2. n,m,c를 받는다.
+3. 리스트를 n+1만큼 만들고 거리변수도 무한대로 만든다.
+4. 모든 간선 정보를 받는다.
+5. 시작 노드는 거리가 0이여서 ` heapq.heappush(q, (0,c))` 으로 설정한다.
+6. 큐가 빌때까지 돈다
+   1. 가장 최단 거리가 짧은 노드에 대한 정보를 꺼낸다.
+   2. 꺼낸 거리가 distance[now]보다 큰거면 넘어가고 아니면 현대 노드와 인접한 다른 노드들을 확인한다.
+   3. 현재 노드를 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우에는 값을 변경해주고 그 값을 추가한다.
+7. 알고리즘 수행후 가장 멀리있는 노드와의 최단거리를 구한다.
+8. 최종으로 출력한다.
